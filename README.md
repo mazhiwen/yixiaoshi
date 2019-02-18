@@ -38,6 +38,7 @@ export NODE_ENV=integration
 
 修改 ./config/paths.js  appBuild为  resolveApp('dist')  
 修改 ./config/webpack.config.prod.js  HtmlWebpackPlugin.href 为  '/'  
+public index.html  base href = './'
 
 
 ## 菜单激活规则
