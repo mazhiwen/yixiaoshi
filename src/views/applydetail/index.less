@@ -1,0 +1,138 @@
+.page_applydetail{
+  .reporttitle{
+    text-align: center;
+    position: relative;
+    >*{
+      display: inline-block;
+    }
+    .reportresult{
+      position: absolute;
+      right: 0;
+      line-height: 48px;
+    }
+  }
+  .report_titlebox{
+    margin: 10px 0;
+  }
+  .report_titleitem{
+    margin-bottom: 30px;
+    >*{
+      width: 50%;
+      text-align: center;
+      display: inline-block;
+      padding: 15px ;
+      border: 1px solid black;
+    }
+    >span:first-child{
+      border-right: none;
+    }
+  }
+  
+  .repot_btn{
+    width: 100%;
+    text-align: center;
+    margin:  0;
+    padding: 0;
+    
+    .ant-anchor-link{
+      flex-grow: 1;
+      border-width: 1px 0 1px 1px;
+      border-style:  solid;
+      border-color:  rgb(217, 217, 217);
+      padding: 15px 0;
+    }
+    .ant-anchor-link:last-child{
+      border-width: 1px;
+    }
+    .ant-anchor-ink{
+      display: none;
+    }
+    .ant-anchor{
+      padding: 0;
+      display: flex;
+    }
+  }
+  .offsetcard{
+    padding-top: 46px;
+    &.tablecard{
+      .ant-card-body{
+        // padding: 0;
+      }
+    }
+  }
+  .details_wrap{
+    display: flex;
+    justify-content: space-between;
+    >*{
+      width: 49%;
+    }
+    .details_wrapright{
+      overflow-y: auto;
+      height: 800px;
+    }
+
+    .ant-card-body{
+    }
+  }
+  .record_wrap{
+    .ant-form-item{
+      .antdformitem_flex;
+    }
+    .recordcustomer_wrap{
+      margin-top: 15px;
+      .ant-card{
+        margin-bottom: 15px;
+      }
+    }
+  }
+  .ant-form-item{
+    // margin-bottom: 0;
+  }
+  .operation_top{
+    margin-bottom: 10px;
+    .ant-card-body{
+      display: flex;
+      justify-content: space-between;
+    }
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+  }
+  .history_badge{
+    display: flex;
+    >*:last-child{
+      flex: 1;
+      text-align: right;
+    }  
+  }
+  .history_content{
+    display: flex;
+    justify-content: space-between; 
+  }
+  .history_wrap{
+    .ant-list-item-content{
+      margin-bottom: 0;
+    }
+    
+  }
+  .reasoncode_wrap{
+    .ant-form-item{
+      margin-bottom: 0;
+    }
+  }
+}
+
+
+
+
+
+
+.text_badge{
+  border-radius: 20px;
+  color: white;
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  margin: 0 2px;
+  box-shadow: 0 0 0 1px #fff;
+  transform-origin: -10% center;
+}

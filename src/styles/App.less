@@ -1,0 +1,168 @@
+.App {
+  text-align: center;
+}
+body{
+  background: #f0f0f0;
+  // f0f0f0
+}
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+.header {
+  display: flex;
+  justify-content:space-between;
+  .header_left{
+    display: inline-flex;
+
+  }
+  .logo {
+    width: 120px;
+    color: white;
+  }
+  .top_menu{
+    line-height: @layout-header-height;
+    >.ant-menu-item{
+      padding: 0;
+      >.ant-dropdown-trigger{
+        padding: 0 20px;
+      }
+    }
+  }
+  .header_right{
+    cursor: pointer;
+    >.ant-dropdown-trigger{
+      // height: 50px;
+    }
+    .ant-avatar-lg{
+      margin-bottom: 3px;
+    }
+    a{
+      color: white;
+    }
+  }
+}
+.content_layout{
+  
+  padding: 30px;
+}
+
+
+
+.gird-table{
+  &.table_nothwidth{
+    th{
+      width: auto;
+    }
+  }
+  border:1px solid #e8e8e8;
+  border-collapse: collapse;
+  width: 100%;
+  caption,.caption{
+    text-align: left;
+    font-weight: normal;
+    margin-bottom: 2rem;
+    font-size: 1.3rem;
+  }  
+  td,th{
+    // box-shadow: 0 0 3px 0 rgba(7,28,78,0.05);
+    border-radius: 3px;
+    border:1px solid #e8e8e8;
+    padding:0.5rem;
+  }
+  th{
+    white-space: nowrap;
+    // background:#FBFCFE;
+    // font-weight: normal;
+    // color: #7E8E9F;
+    width: 100px;
+  }
+  td{
+    background:#ffffff;
+    // padding-left: 3rem;
+    text-align: left;
+  }
+  &.fix-size-table{
+    th{
+      width: 12%;
+    }
+    td{
+      width: 38%;
+    }
+  }
+  &.fix-size-table-2{
+    tbody{
+      >tr:first-child{
+        >th:nth-child(1){
+          width: 50%;
+        }
+        >th:nth-child(2){
+          width: 12%;
+        }
+      }
+    }
+  }
+}
+
+
+.ant-form-vertical{
+  .ant-form-item-label{
+    height: 29px;
+  }
+}
+
+
+
+//覆盖antd form样式统一form类
+//内联input布局 设置label宽度和input宽度
+//label文字在左边，input在右边
+.antdformitem_flex{
+  display: flex;
+  .ant-form-item-label{
+    width: 100px;
+  }
+  .ant-form-item-control-wrapper{
+    flex: 1;
+    .ant-calendar-picker{
+      width: 100%;
+    }
+  }
+}
+.antdformitem_flexwrap{
+  >.ant-form-item{
+    .antdformitem_flex;
+  }
+}
+//formitem 呈 inlineblock水平一行 
+.inlineblock_formwrap{
+  .ant-form-item{
+    margin-bottom: 0; 
+  }
+  
+}
+
+.ant-input-number{
+  width: 100% !important;
+}

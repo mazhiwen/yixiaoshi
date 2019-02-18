@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    ["import", 
+      {
+        "libraryName": "antd",
+        "style": true
+      } 
+    ],
+    ["transform-runtime"]
+  ],
+  "presets": ["env", "stage-0","react"]
+}
