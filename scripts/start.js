@@ -91,7 +91,8 @@ choosePort(HOST, DEFAULT_PORT)
         // clearConsole();
       }
       console.log(chalk.cyan('Starting the integration server...\n'));
-      openBrowser(urls.localUrlForBrowser+packageJsonObj.Domain.contextPath);
+      // openBrowser(urls.localUrlForBrowser+packageJsonObj.Domain.contextPath);
+      openBrowser(urls.localUrlForBrowser);
     });
 
     ['SIGINT', 'SIGTERM'].forEach(function(sig) {

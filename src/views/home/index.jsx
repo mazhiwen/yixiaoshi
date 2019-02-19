@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
   Form, InputNumber, Button, DatePicker,Select,Row,
-  Col,Table,Card,Tabs,InputNumberNumber
+  Col,Table,Card,Tabs,Input
 } from 'antd';
 import { Link } from 'react-router-dom'
 
@@ -43,10 +43,10 @@ class HomeFormOrigin extends React.Component{
       getFieldDecorator, getFieldsError
     } = this.props.form;
     return(
-      <Tabs defaultActiveKey="1">
+      <Tabs className="page_home" defaultActiveKey="1">
         <TabPane tab="价格计算" key="1">
           <Form layout='vertical' onSubmit={this.handleSubmit}>
-            <Card title="每单总成本">  
+            <Card size="small" title="每单总成本">  
               <Row gutter={8}>
                 <Col span={12}>
                   <FormItem label="预计月销量">
@@ -92,7 +92,7 @@ class HomeFormOrigin extends React.Component{
                 </Col>
               </Row>
             </Card>  
-            <Card title="售价" style={{marginTop:10}}>
+            <Card size="small" title="售价" style={{marginTop:10}}>
               <Row gutter={8}>
                 {/* <Col span={12}>
                   <FormItem label="预计售价">
@@ -152,7 +152,7 @@ class HomeFormOrigin extends React.Component{
                 </Col>  
               </Row>
             </Card>
-            <Card title="利润" style={{marginTop:10}}>
+            <Card size="small" title="利润" style={{marginTop:10}}>
               <Row gutter={8}>
                 <Col span={12}>
                   <FormItem label="实际到账">
@@ -171,10 +171,13 @@ class HomeFormOrigin extends React.Component{
                   </FormItem>
                 </Col>
                 <Col span={12}>
-                  <FormItem label="所得利润基数（利润=利润基数*每单总成本）">
+                  <FormItem label="利润成本比（利润成本比=利润/每单总成本）">
                     {getFieldDecorator('profitCardinal',{
                     })(
-                      <InputNumber disabled step={0.1}/>
+                      <InputNumber disabled step={0.1}
+                        formatter={value => `${value}%`}
+                        parser={value => value.replace('%', '')}
+                      />
                     )}
                   </FormItem>
                 </Col>
@@ -203,20 +206,21 @@ const HomeForm = Form.create({
   },
   mapPropsToFields(props) {
     console.log(props);
-    
     let {
       monthRent,predictMonthSaleCount,predictFoodCost,packageCost,
-      profitCardinal,predictPrice,salePackageCost,salePrice,
+      salePackageCost,salePrice,
       activityCost,riderCost
     } = props;
-    salePrice=parseFloat(salePrice);
-    salePackageCost=parseFloat(salePackageCost);
-    activityCost=parseFloat(activityCost);
-    riderCost=parseFloat(riderCost);
+    salePrice=parseFloat(salePrice)||0; 
+    salePackageCost=parseFloat(salePackageCost)||0;
+    activityCost=parseFloat(activityCost)||0;
+    riderCost=parseFloat(riderCost)||0;
+    monthRent=parseFloat(monthRent)||0;
+    predictMonthSaleCount=parseFloat(predictMonthSaleCount)||0;
+    predictFoodCost=parseFloat(predictFoodCost)||0;
+    packageCost=parseFloat(packageCost)||0;
     //每单总成本 = 每月租金,水电等场地费用 / 预计月销量 + 预计食材成本 + 包装成本
-    let totalCost=parseFloat(monthRent)/parseFloat(predictMonthSaleCount)+parseFloat(predictFoodCost)+parseFloat(packageCost);
-    
-    
+    let totalCost=monthRent/predictMonthSaleCount+predictFoodCost+packageCost;
     //平台收费： （平台标价 + 餐盒费 - 满减（等活动支出））* 0.21 
     // 当平台收费《=4.5， 
     // （平台标价 + 餐盒费 - 满减（等活动支出））* 0.21 <= 4.5
@@ -227,20 +231,13 @@ const HomeForm = Form.create({
     }else{
       appCost=0.21*( salePrice + salePackageCost - activityCost);
     }
-
     //到账 :  平台标价 + 餐盒费 - 平台收费 - 满减（等活动支出）
     let getMoney=salePrice+ salePackageCost -activityCost-appCost;
-
     //利润 : 到账 - 每单总成本 
     // =》利润 = 平台标价 + 餐盒费 - 平台收费 - 满减（等活动支出）- 每单总成本 
     let profit =  getMoney - totalCost;
-
-
-    
     // =》利润成本比 = 利润 / 每单总成本
-
-
-
+    let profitCardinal=profit / totalCost *100
     //客户付款： 平台标价 + 餐盒费 + 配送费 - 满减（等活动支出）
     let userPay =  salePrice + salePackageCost + riderCost - activityCost;
 

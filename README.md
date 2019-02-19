@@ -38,7 +38,13 @@ export NODE_ENV=integration
 
 修改 ./config/paths.js  appBuild为  resolveApp('dist')  
 修改 ./config/webpack.config.prod.js  HtmlWebpackPlugin.href 为  '/'  
+env.js  BASE_HREF:'./'
 public index.html  base href = './'
+
+## 不做base 地址
+做本地build步骤以及：
+注释 utils/history.js 的 basename:contextPath
+script/start.js 改为 openBrowser(urls.localUrlForBrowser);
 
 
 ## 菜单激活规则

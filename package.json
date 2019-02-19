@@ -106,6 +106,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "homepage":".",
   "devDependencies": {
     "babel-plugin-import": "^1.8.0",
     "babel-plugin-transform-runtime": "^6.23.0",
