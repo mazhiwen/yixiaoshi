@@ -11,6 +11,7 @@ import routes from 'routes';
 import {stateList} from 'configs';
 
 import moment from 'moment';
+import DataSet from '@antv/data-set';
 
 const TabPane = Tabs.TabPane;
 const FormItem= Form.Item;
@@ -131,6 +132,14 @@ class HomeFormOrigin extends React.Component{
                     </FormItem>
                   </Col>
                   <Col span={12}>
+                    <FormItem label="客户使用红包额">
+                      {getFieldDecorator('userRed',{
+                      })(
+                        <InputNumber step={0.1}/>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span={12}>
                     <FormItem label="平台收取费用">
                       {getFieldDecorator('appCost',{
                       })(
@@ -218,9 +227,13 @@ const HomeForm = Form.create({
       appCost,
       salePackageCost,
       profit,
-      salePrice
+      salePrice,
+      userRed
     } =props;
     return {
+      userRed: Form.createFormField({
+        value: userRed,
+      }),
       totalCost: Form.createFormField({
         value: totalCost,
       }),
@@ -277,8 +290,9 @@ const HomeForm = Form.create({
 let calculateData=(formValues)=>{
   let {
     monthRent,predictMonthSaleCount,predictFoodCost,packageCost,
-    salePackageCost,salePrice,activityCost,riderCost
+    salePackageCost,salePrice,activityCost,riderCost,userRed
   } = formValues;
+  userRed=parseFloat(userRed)||0;
   salePrice=parseFloat(salePrice)||0; 
   salePackageCost=parseFloat(salePackageCost)||0;
   activityCost=parseFloat(activityCost)||0;
@@ -307,7 +321,7 @@ let calculateData=(formValues)=>{
   // =》利润成本比 = 利润 / 每单总成本
   let profitCardinal=profit / totalCost *100
   //客户付款： 平台标价 + 餐盒费 + 配送费 - 满减（等活动支出）
-  let userPay =  salePrice + salePackageCost + riderCost - activityCost;
+  let userPay =  salePrice + salePackageCost + riderCost - activityCost -userRed;
   return {
     totalCost,
     getMoney,
@@ -322,7 +336,8 @@ let calculateData=(formValues)=>{
     appCost,
     salePackageCost,
     profit,
-    salePrice
+    salePrice,
+    userRed
   };
 }
 class Home extends React.Component{
@@ -342,9 +357,10 @@ class Home extends React.Component{
         salePrice:20,
         salePackageCost:1,
         activityCost:3,
-        riderCost:4
+        riderCost:4,
+        userRed:0
       },
-      data : [
+      chartData : [
         { genre: 'Sports', sold: 275 },
         { genre: 'Strategy', sold: 115},
         { genre: 'Action', sold: 120 },
@@ -376,8 +392,10 @@ class Home extends React.Component{
       totalCost,
       activityCost,
       salePackageCost,
+      riderCost,
+      userRed
     } = this.calculateFormValues;
-    let data=[];
+    let chartData=[];
     let salePrice = 1;
     while(salePrice<70){
       let appCost;
@@ -388,22 +406,39 @@ class Home extends React.Component{
       }
       let getMoney=salePrice+ salePackageCost -activityCost-appCost;
       let profit =  getMoney - totalCost;
-      data.push({
+      let userPay =  salePrice + salePackageCost + riderCost - activityCost -userRed;
+      chartData.push({
         salePrice,
-        profit
+        profit,
+        userPay
       });
       salePrice++;
     }
+    const transChartData = new DataSet().createView()
+      .source(chartData)
+      .transform({
+        type: 'fold',
+        fields: [ 'profit', 'userPay' ], // 展开字段集
+        key: 'key',                   // key字段
+        value: 'amount',               // value字段
+        retains: [ 'salePrice' ]        // 保留字段集，默认为除 fields 以外的所有字段
+      });
+      console.log(transChartData);
     this.setState({
-      data,
+      chartData:transChartData,
       cols : {
         profit: { alias: '利润' },
-        salePrice: { alias: '标价' }
+        salePrice: { alias: '标价' },
+        userPay:{ alias: '用户付款' },
+        amount:{alias:'金额'}
       }
     })
   }
+  componentDidMount(){
+    this.generatePriceProfit();
+  }
   render() {
-    const {formValues,data,cols} = this.state;
+    const {formValues,chartData,cols} = this.state;
     this.calculateFormValues=calculateData(formValues);
     
     return (
@@ -416,12 +451,14 @@ class Home extends React.Component{
           {JSON.stringify(formValues, null, 2)}
         </pre> */}
         <Button onClick={this.generatePriceProfit}>生成价格-利润梯度表</Button>
-        <Chart width={500} height={500} data={data} scale={cols}>
-          <Axis name="salePrice" />
-          <Axis name="profit" />
+        <Chart width={500} height={500} data={chartData} scale={cols}
+          forceFit
+        >
+          <Axis name="salePrice" title/>
+          <Axis name="amount" title/>
           <Legend position="top" dy={-20} />
           <Tooltip />
-          <Geom type="line" position="salePrice*profit"  />
+          <Geom type="line" position="salePrice*amount" color={'key'} />
         </Chart>
       </div>
     );
